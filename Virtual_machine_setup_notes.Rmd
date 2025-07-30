@@ -1,0 +1,101 @@
+---
+title: "Python Virtual Machine Setup and AI training notes"
+author: "Matthew J Burns"
+date: "2025-01-07"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This working document explains the setup of a University of Melbourne virtual machine for AI analysis. It also contains notes regarding the AI training and analysis. The document will be refined over time.
+
+## Create research server
+
+The first step is to create a UoM research server---<https://rcp.research.unimelb.edu.au/>
+
+The operating system should be Linux. Best to select a virtual machine with at least 8 cores and lots of RAM. Because we want to make use of GPU acceleration, we need to reserve a premium size virtual machine. A reservation can be started. Once a reservation has been secured, a very important next step is to click "Resize". If the size of your virtual machine is something like "GPU A40 (12GB vRAM) 8 vCPU 117GB" then you know that GPU resources are available.
+
+## Mount network drives
+
+We need to be able to access two shared drives. The first is the Medixflux store. The other store is the WERG shared drive. The code below needs to be run in the Linux command line. In this example code below, the Mediaflux store will be mounted to the folder `mnt` in the `HOME` directory. The WERG drive will be mounted in the directory `mnt2`. Of course, choose your preferred directory names.
+
+`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //mediaflux.researchsoftware.unimelb.edu.au/proj-6600_monbulk_platypus-1128.4.857 $HOME/mnt`
+
+`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //research-cifs.unimelb.edu.au/2200-werg $HOME/mnt2`
+
+## Install Anaconda
+
+We need to be able to install Python into a `conda` virtual environment. I've found a good way to do this is use Anaconda Navigator. First download Anaconda (<https://www.anaconda.com/download>) (you will need to provide an email address) and following the relevant instructions.
+
+## Open Anaconda and Create Virtual Environment
+
+Open a new Linux terminal and type the following code:
+
+`anaconda-navigator`
+
+The above will launch the Anaconda Navigator graphical interface. When this opens, the next step is to create a virtual environment. To do this, simply navigate to Environments and click Create. You will be asked which version of Python to install. Install the latest version the computer suggests. Give the virtual environment an intuitive name for the purpose of the analysis, e.g. `Platypus`.
+
+## Check if CUDA is available
+
+CUDA allows us to use GPU acceleration. We need to check if CUDA is available. To do this, open another Linux terminal and run the command `nvidia-smi`. If this runs, it will show on the top right what version of CUDA is available to the user. I my virtual machine, version 12.2 is available. This command will also show NVIDA driver settings.
+
+## Install Ultralytics
+
+YOLO model training and deployment is achieved using Ultralytics. We need to install Ultralytics along with some other libraries. It is very important that we carefully follow the documentation here: <https://docs.ultralytics.com/quickstart/#install-ultralytics>
+
+To install the required libraries, open a fresh Linux terminal. We need to activate our virtual conda environment. To do this, type in `conda activate platypus`
+
+Now install the libraries into the virtual environment:
+
+`conda install -c pytorch -c nvidia -c conda-forge pytorch torchvision pytorch-cuda=11.8 ultralytics`
+
+Good practice to deactivate the conda environment. Type the following in terminal: `conda deactivate`
+
+## Installing Visual Studio Code
+
+I would suggest use of Visual Studio Code. This IDE is not available through Anaconda Navigator. You will need to download and install yourself. The web link is here: <https://code.visualstudio.com/download>
+
+I found that installing the Debian package didn't work using the graphical installer. Using the following command in terminal did work: `sudo dpkg -i code_1.96.4-1736991114_amd64.deb`
+
+## Open coding GUI and setup
+
+The virtual machine should now be ready to run AI related analyses. Return back to Anaconda Navigator. Clicking the Home tab, choose your `Platypus` virtual environment. Then launch Visual Studio Code. You will want to install the following Extensions, GitHub Copilot, GitHub Pull Requests, and Jupyter. When installing the Jupyter Extension, you might be prompted to install the package `ipykernel`. Log into your GitHub account (bottom left buttons).
+
+To make coding easier and more like the Rstudio interface, you can run code in an interactive window. Highlighting code and pressing `shift + enter` should run lines of code. Make sure that the correct virtual conda environment is selected (e.g. `platypus` and not `base`). On my installation, this keyboard shortcut didn't work. To enable the shortcut, you need to do the following. Press fn F1 and edit Open User Settings (JSON). Then enter the following line: `jupyter.interactiveWindow.textEditor.executeSelection": true`. Save the settings. This tip was sourced here <https://stackoverflow.com/questions/65241321/python-shift-enter-not-working-in-vscode-with-jupyter>
+
+The front-end of our tech stack is ready to go. Good practice to check if CUDA is available. CUDA is a software framework which allows us to access the computing power of GPUs. Run the following code and `True` is returned, then GPU acceleration is available.
+
+`import torch`
+
+`torch.cuda.is_available()`
+
+## General maintenance
+
+Good practice to regularly check for system updates. This is done using the following commands:
+
+`sudo apt update`
+
+`sudo apt upgrade`
+
+Unlike WERGs virtual machine water-prod, running the above commands will not change any packages within the created virtual environment.
+
+## AI training notes
+
+The (hopefully) final images used for AI training are contained here:
+
+`'/Volumes/2200-werg/wergStaff/Dana/AI Training/Final Training Set (Dec 2024)'`
+
+Within the folder, there are sub-folders which contain different habitat types. These include `Flow Manipulation` (59 photos), `Fyke Net` (79 photos), `Pool` (143 photos), `Riffle` (261 photos), and `Run` (119 photos). There is also a sub-folder which contains images without platypus: `Images Without Platypus` (324 photos).
+
+Yi Zhen used the images described above to train a YOLO model. More details on this are contained in documentation here ???. The model is saved on `mnt2` here: `/home/unimelb.edu.au/burnsm/mnt2/wergStaff/Dana/AI Training/Jan_2025_Final/Models/28_01_2025/best.pt`
+
+The model is the checkpoint that resulted in the highest validation performance during training. It is saved when the model performs better than any previous epoch. An older model trained by Yi Zhen (`last.pt`) is the checkpoint from the final epoch of training, regardless of performance.
+
+## Using the YOLO model
