@@ -24,11 +24,44 @@ The operating system should be Linux. Best to select a virtual machine with at l
 
 ## Mount network drives
 
-We need to be able to access two shared drives. The first is the Medixflux store. The other store is the WERG shared drive. The code below needs to be run in the Linux command line. In this example code below, the Mediaflux store will be mounted to the folder `mnt` in the `HOME` directory. The WERG drive will be mounted in the directory `mnt2`. Of course, choose your preferred directory names.
+We need to be able to access two shared drives. The first is the Medixflux store. The other store is the WERG shared drive. The code below needs to be run in the Linux command line. In this example code below, the Mediaflux store will be mounted to the folder `XXXX`. The WERG drive will be mounted in the directory `mnt/research`. Of course, choose your preferred directory names. In order to monut the WERG drive, you need the CIFS mount helper installed, which is required:
 
-`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //mediaflux.researchsoftware.unimelb.edu.au/proj-6600_monbulk_platypus-1128.4.857 $HOME/mnt`
+`sudo apt update`
+`sudo apt install cifs-utils`
+
+Then create a directory where to mount the WERG drive:
+
+`sudo mkdir -p /mnt/research`
+
+Run the following to mount:
+
+`sudo mount -t cifs //172.26.10.150/2200-werg /mnt/research -o user=burnsm,domain=unimelb,uid=$UID,gid=$(id -g)`
+
+Now for Mediaflux, create a directory:
+
+`sudo mkdir -p /mnt/Mediaflux`
+
+Before you run the following command, you need to open Mediaflux application on your phone. After running the command below and entering your password, you need to authenticate the login.
+
+`sudo mount -t cifs //128.250.56.118/proj-6600_monbulk_platypus-1128.4.857 /mnt/Mediaflux -o user=burnsm,domain=unimelb,uid=$UID,gid=$(id -g)`
+
+
+
+
+
+128.250.56.118
+
+`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //mediaflux.researchsoftware.unimelb.edu.au/proj-6600_monbulk_platypus-1128.4.857 $/mnt`
 
 `sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //research-cifs.unimelb.edu.au/2200-werg $HOME/mnt2`
+
+`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //172.26.10.150/2200-werg $mnt2`
+
+172.26.10.150
+
+
+Working - sudo mount -t cifs //172.26.10.150/2200-werg /mnt/research -o user=burnsm,domain=unimelb,uid=$UID,gid=$(id -g)
+
 
 ## Install Anaconda
 
