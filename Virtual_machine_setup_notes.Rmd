@@ -45,27 +45,11 @@ Before you run the following command, you need to open Mediaflux application on 
 
 `sudo mount -t cifs //128.250.56.118/proj-6600_monbulk_platypus-1128.4.857 /mnt/Mediaflux -o user=burnsm,domain=unimelb,uid=$UID,gid=$(id -g)`
 
-
-
-
-
-128.250.56.118
-
-`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //mediaflux.researchsoftware.unimelb.edu.au/proj-6600_monbulk_platypus-1128.4.857 $/mnt`
-
-`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //research-cifs.unimelb.edu.au/2200-werg $HOME/mnt2`
-
-`sudo mount -t cifs -ouser=burnsm,domain=unimelb,uid=$UID,gid=$(id -g) //172.26.10.150/2200-werg $mnt2`
-
-172.26.10.150
-
-
-Working - sudo mount -t cifs //172.26.10.150/2200-werg /mnt/research -o user=burnsm,domain=unimelb,uid=$UID,gid=$(id -g)
-
+Note that I sourced the IP addresses by pinging: `ping mediaflux.researchsoftware.unimelb.edu.au`
 
 ## Install Anaconda
 
-We need to be able to install Python into a `conda` virtual environment. I've found a good way to do this is use Anaconda Navigator. First download Anaconda (<https://www.anaconda.com/download>) (you will need to provide an email address) and following the relevant instructions.
+We need to be able to install Python into a `conda` virtual environment. I've found a good way to do this is use Anaconda Navigator. First download Anaconda (<https://www.anaconda.com/download>) (you will need to provide an email address) and following the relevant instructions. The install step is to load a terminal and type in `bash XXX` where XXX is the Anaconda installation file. Make sure the bash command is installed as a regular user. We don't need a shared, system-wide install for this virtual machine.
 
 ## Open Anaconda and Create Virtual Environment
 
@@ -73,11 +57,11 @@ Open a new Linux terminal and type the following code:
 
 `anaconda-navigator`
 
-The above will launch the Anaconda Navigator graphical interface. When this opens, the next step is to create a virtual environment. To do this, simply navigate to Environments and click Create. You will be asked which version of Python to install. Install the latest version the computer suggests. Give the virtual environment an intuitive name for the purpose of the analysis, e.g. `Platypus`.
+The above will launch the Anaconda Navigator graphical interface. When this opens, the next step is to create a virtual environment. To do this, simply navigate to Environments and click Create. You will be asked which version of Python to install. Install a more version, but perhaps not the latest (try 3.12.11). Give the virtual environment an intuitive name for the purpose of the analysis, e.g. `Platypus`.
 
 ## Check if CUDA is available
 
-CUDA allows us to use GPU acceleration. We need to check if CUDA is available. To do this, open another Linux terminal and run the command `nvidia-smi`. If this runs, it will show on the top right what version of CUDA is available to the user. I my virtual machine, version 12.2 is available. This command will also show NVIDA driver settings.
+CUDA allows us to use GPU acceleration. We need to check if CUDA is available. To do this, open another Linux terminal and run the command `nvidia-smi`. If this runs, it will show on the top right what version of CUDA is available to the user. I my virtual machine, version 12.8 is available. This command will also show NVIDA driver settings.
 
 ## Install Ultralytics
 
@@ -96,14 +80,19 @@ Good practice to deactivate the conda environment. Type the following in termina
 I would suggest use of Visual Studio Code. This IDE is not available through Anaconda Navigator. You will need to download and install yourself. The web link is here: <https://code.visualstudio.com/download>
 
 I found that installing the Debian package didn't work using the graphical installer. Using the following command in terminal did work: `sudo dpkg -i code_1.96.4-1736991114_amd64.deb`
+Note that the exact file name will vary with the latest releases of VS code. During the installation process, I was required to press 'Yes' to some Microsoft condition.
 
 ## Open coding GUI and setup
 
 The virtual machine should now be ready to run AI related analyses. Return back to Anaconda Navigator. Clicking the Home tab, choose your `Platypus` virtual environment. Then launch Visual Studio Code. You will want to install the following Extensions, GitHub Copilot, GitHub Pull Requests, and Jupyter. When installing the Jupyter Extension, you might be prompted to install the package `ipykernel`. Log into your GitHub account (bottom left buttons).
 
-To make coding easier and more like the Rstudio interface, you can run code in an interactive window. Highlighting code and pressing `shift + enter` should run lines of code. Make sure that the correct virtual conda environment is selected (e.g. `platypus` and not `base`). On my installation, this keyboard shortcut didn't work. To enable the shortcut, you need to do the following. Press fn F1 and edit Open User Settings (JSON). Then enter the following line: `jupyter.interactiveWindow.textEditor.executeSelection": true`. Save the settings. This tip was sourced here <https://stackoverflow.com/questions/65241321/python-shift-enter-not-working-in-vscode-with-jupyter>
+To make coding easier and more like the Rstudio interface, you can run code in an interactive window. Highlighting code and pressing `shift + enter` should run lines of code. Make sure that the correct virtual conda environment is selected (e.g. `Platypus` and not `base`). On my installation, this keyboard shortcut didn't work. To enable the shortcut, you need to do the following. Press fn F1 and edit Open User Settings (JSON). Then enter the following line: `jupyter.interactiveWindow.textEditor.executeSelection": true`. Save the settings. This tip was sourced here <https://stackoverflow.com/questions/65241321/python-shift-enter-not-working-in-vscode-with-jupyter>
 
-The front-end of our tech stack is ready to go. Good practice to check if CUDA is available. CUDA is a software framework which allows us to access the computing power of GPUs. Run the following code and `True` is returned, then GPU acceleration is available.
+Another tip. I found when launching VS Code, I wasn't in the virtual environment. Running the following code was meant to make sure that the virtual environment is running on launch of VS code:
+
+`conda config --set auto_activate_base false`
+
+But I found some issues. Just make when VS code opens, that you press Ctrl+Shift+P and select Python: Select Interpreter (make sure it is the Python virtual environment). The front-end of our tech stack is ready to go. Good practice to check if CUDA is available. CUDA is a software framework which allows us to access the computing power of GPUs. Run the following code and `True` is returned, then GPU acceleration is available.
 
 `import torch`
 
