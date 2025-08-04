@@ -24,7 +24,7 @@ The operating system should be Linux. Best to select a virtual machine with at l
 
 ## Mount network drives
 
-We need to be able to access two shared drives. The first is the Medixflux store. The other store is the WERG shared drive. The code below needs to be run in the Linux command line. In this example code below, the Mediaflux store will be mounted to the folder `XXXX`. The WERG drive will be mounted in the directory `mnt/research`. Of course, choose your preferred directory names. In order to monut the WERG drive, you need the CIFS mount helper installed, which is required:
+We need to be able to access two shared drives. The first is the Mediaxflux store. The other store is the WERG shared drive. The code below needs to be run in the Linux command line. In this example code below, the Mediaflux store will be mounted to the folder `mnt/Mediaflux`. The WERG drive will be mounted in the directory `mnt/research`. Of course, choose your preferred directory names. In order to monut the WERG drive, you need the CIFS mount helper installed, which is required:
 
 `sudo apt update`
 `sudo apt install cifs-utils`
@@ -46,6 +46,8 @@ Before you run the following command, you need to open Mediaflux application on 
 `sudo mount -t cifs //128.250.56.118/proj-6600_monbulk_platypus-1128.4.857 /mnt/Mediaflux -o user=burnsm,domain=unimelb,uid=$UID,gid=$(id -g)`
 
 Note that I sourced the IP addresses by pinging: `ping mediaflux.researchsoftware.unimelb.edu.au`
+
+In previous experience, running the above sometimes fails. ChatGPT can be used for alternative mounting syntax.
 
 ## Install Anaconda
 
