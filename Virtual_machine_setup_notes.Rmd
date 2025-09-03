@@ -47,7 +47,7 @@ Before you run the following command, you need to open Mediaflux application on 
 
 Note that I sourced the IP addresses by pinging: `ping mediaflux.researchsoftware.unimelb.edu.au`
 
-In previous experience, running the above sometimes fails. ChatGPT can be used for alternative mounting syntax.
+In previous experience, running the above sometimes fails. ChatGPT can be used for alternative mounting syntax. I also tried using a token to login but failed. I was hoping that the token might 'persist' (less dropouts). Could investigate this further.
 
 ## Install Anaconda
 
