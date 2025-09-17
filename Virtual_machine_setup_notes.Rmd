@@ -120,8 +120,13 @@ The (hopefully) final images used for AI training are contained here:
 
 Within the folder, there are sub-folders which contain different habitat types. These include `Flow Manipulation` (59 photos), `Fyke Net` (79 photos), `Pool` (143 photos), `Riffle` (261 photos), and `Run` (119 photos). There is also a sub-folder which contains images without platypus: `Images Without Platypus` (324 photos).
 
-Yi Zhen used the images described above to train a YOLO model. More details on this are contained in documentation here ???. The model is saved on `mnt2` here: `/home/unimelb.edu.au/burnsm/mnt2/wergStaff/Dana/AI Training/Jan_2025_Final/Models/28_01_2025/best.pt`
+Yi Zhen used the images described above to train a YOLO model. More details on this are contained here `/mnt/research/wergProj/MONBULK/Platypus_AI/Yi_Model_07_07_2025/`.
+The actual model path is here: `/mnt/research/wergProj/MONBULK/Platypus_AI/Yi_Model_07_07_2025/code/weights/best.pt`
 
 The model is the checkpoint that resulted in the highest validation performance during training. It is saved when the model performs better than any previous epoch. An older model trained by Yi Zhen (`last.pt`) is the checkpoint from the final epoch of training, regardless of performance.
+
+
+
+
 
 ## Using the YOLO model
