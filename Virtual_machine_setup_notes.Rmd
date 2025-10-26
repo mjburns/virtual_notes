@@ -126,7 +126,7 @@ The actual model path is here: `/mnt/research/wergProj/MONBULK/Platypus_AI/Yi_Mo
 The model is the checkpoint that resulted in the highest validation performance during training. It is saved when the model performs better than any previous epoch. An older model trained by Yi Zhen (`last.pt`) is the checkpoint from the final epoch of training, regardless of performance.
 
 
-
+#Path("/mnt/research/wergData/Platypus_AI_CS/Images/AI Training October 2025")
 
 
 ## Using the YOLO model
