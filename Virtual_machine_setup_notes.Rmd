@@ -37,6 +37,14 @@ Run the following to mount:
 
 `sudo mount -t cifs //172.26.10.150/2200-werg /mnt/research -o user=burnsm,domain=unimelb,uid=$UID,gid=$(id -g)`
 
+For mounting the Mediaflux WERG drive:
+
+sudo mount -t cifs //mediaflux.researchsoftware.unimelb.edu.au/proj-2200_werg-1128.4.1638 \
+/mnt/research \
+-o username=burnsm,rw,uid=$(id -u),gid=$(id -g),vers=3.0
+
+
+
 Now for Mediaflux, create a directory:
 
 `sudo mkdir -p /mnt/Mediaflux`
